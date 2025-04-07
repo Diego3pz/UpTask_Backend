@@ -4,5 +4,5 @@ import colors from 'colors'
 const port = process.env.PORT || 4000
 
 server.listen(port, ()=>{
-    console.log(colors.cyan.bold(`REST APi funcionando en el puerto ${port}`));
+    console.log(colors.cyan.bold(`REST APi Funcionando en el puerto ${port}`));
 })
