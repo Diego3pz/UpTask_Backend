@@ -1,41 +1,80 @@
-import { transporter } from "../config/nodemailer"
+import { sendEmail } from "../config/brevoemail";
 
 interface IEmail {
-    email: string
-    name: string
-    token: string
+    email: string;
+    name: string;
+    token: string;
 }
 
 export class AuthEmail {
     static sendConfirmationEmail = async (user: IEmail) => {
-        const info = await transporter.sendMail({
-            from: 'UpTask <admin@uptask.com>',
-            to: user.email,
-            subject: 'UpTask - Confirma tu cuenta',
-            text: 'UpTask - Confirma tu cuenta',
-            html: `<p> Hola: ${user.name}, has creado tu cuenta en UpTask, ya casi esta todo listo, solo debes confirmar tu cuenta </p>
-                <p>Visita el siguiente enlace:</p>
-                <a href="${process.env.FRONTEND_URL}/auth/confirm-account">Confirmar cuenta</a>
-                <p>E ingresa el codigo: <b>${user.token}</b></p>
-                <p>Este token expira en 10 minutos</p>
-            `
-        })
-        
-    }
+
+        const emailData = {
+            sender: { name: 'UpTask-MERN', email: 'di3godevpc@gmail.com' },
+            to: [{ email: user.email, name: user.name }],
+            subject: 'UpTask-MERN - Confirma tu cuenta',
+            htmlContent: `
+                <html>
+                    <body>
+                        <div style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                            <div style="background-color: #4CAF50; color: #ffffff; padding: 20px; text-align: center;">
+                                <h1 style="margin: 0;">UpTask-MERN Di3goDev</h1>
+                            </div>
+                            <div style="padding: 20px; color: #333333;">
+                                <p style="font-size: 16px;">Hola <b>${user.name}</b>.</p>
+                                <p style="font-size: 16px;">Has creado tu cuenta en <b>UpTask-MERN</b>. Ya casi está todo listo, solo debes confirmar tu cuenta.</p>
+                                <p style="font-size: 16px;">Haz clic en el siguiente enlace para confirmar tu cuenta:</p>
+                                <div style="text-align: center; margin: 20px 0;">
+                                    <a href="${process.env.FRONTEND_URL}/auth/confirm-account" style="background-color: #4CAF50; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-size: 16px;">Confirmar cuenta</a>
+                                </div>
+                                <p style="font-size: 16px;">Y utiliza el siguiente código:</p>
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: #4CAF50;">${user.token}</p>
+                                <p style="font-size: 14px; color: #666666;">Este token expira en 10 minutos.</p>
+                            </div>
+                            <div style="background-color: #f4f4f9; color: #666666; text-align: center; padding: 10px; font-size: 12px;">
+                                <p style="margin: 0;">UpTask-MERN Di3goDev &copy; 2025</p>
+                            </div>
+                        </div>
+                    </body>
+                </html>
+            `,
+        };
+
+        await sendEmail(emailData);
+    };
 
     static sendPasswordResetToken = async (user: IEmail) => {
-        const info = await transporter.sendMail({
-            from: 'UpTask <admin@uptask.com>',
-            to: user.email,
-            subject: 'UpTask - Reestablece tu password',
-            text: 'UpTask - Reestablece tu password',
-            html: `<p> Hola: ${user.name}, has solicitado reestablecer tu password.</p>
-                <p>Visita el siguiente enlace:</p>
-                <a href="${process.env.FRONTEND_URL}/auth/new-password">Reestablecer Password</a>
-                <p>E ingresa el codigo: <b>${user.token}</b></p>
-                <p>Este token expira en 10 minutos</p>
-            `
-        })
-        
-    }
+        const emailData = {
+            sender: { name: 'UpTask-MERN', email: 'di3godevpc@gmail.com' },
+            to: [{ email: user.email, name: user.name }],
+            subject: 'UpTask-MERN - Recuperar contraseña',
+            htmlContent: `
+                <html>
+                    <body>
+                        <div style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                            <div style="background-color: #FF5722; color: #ffffff; padding: 20px; text-align: center;">
+                                <h1 style="margin: 0;">UpTask-MERN Di3goDev</h1>
+                            </div>
+                            <div style="padding: 20px; color: #333333;">
+                                <p style="font-size: 16px;">Hola <b>${user.name}</b>,</p>
+                                <p style="font-size: 16px;">Has solicitado recuperar tu contraseña en <b>UpTask-MERN</b>.</p>
+                                <p style="font-size: 16px;">Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
+                                <div style="text-align: center; margin: 20px 0;">
+                                    <a href="${process.env.FRONTEND_URL}/auth/new-password" style="background-color: #FF5722; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-size: 16px;">Recuperar contraseña</a>
+                                </div>
+                                <p style="font-size: 16px;">O utiliza el siguiente código:</p>
+                                <p style="font-size: 18px; font-weight: bold; text-align: center; color: #FF5722;">${user.token}</p>
+                                <p style="font-size: 14px; color: #666666;">Este token expira en 10 minutos.</p>
+                            </div>
+                            <div style="background-color: #f4f4f9; color: #666666; text-align: center; padding: 10px; font-size: 12px;">
+                                <p style="margin: 0;">UpTask-MERN Di3goDev &copy; 2025</p>
+                            </div>
+                        </div>
+                    </body>
+                </html>
+            `,
+        };
+
+        await sendEmail(emailData);
+    };
 }
